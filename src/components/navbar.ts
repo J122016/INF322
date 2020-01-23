@@ -23,7 +23,6 @@ import { customCss } from './style';
 
 // Importen sus tipos de datos y funciones
 import { getAllCursos } from '../actions/cursos';
-import { ListaCursos } from '../reducers/cursos';
 
 // These are the actions needed by this element.
 import {
@@ -38,16 +37,8 @@ import '@polymer/app-layout/app-scroll-effects/effects/waterfall.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import './snack-bar.js';
 
-// Aqui se importan los componentes.
-import './horario-clases';
-
-@customElement('home-page')
-export class HomePage extends connect(store)(LitElement) {
-  @property({type: Object})
-  private _cursos: ListaCursos = {};
-
-  @property({type: Boolean})
-  private _loggedIn: boolean = false;
+@customElement('nav-bar')
+export class Navbar extends connect(store)(LitElement) {
 
   @property({type: String})
   private _page: string = '';
@@ -57,121 +48,23 @@ export class HomePage extends connect(store)(LitElement) {
   static get styles() {
     return [customCss,
       css`
-        :host {
-          display: block;
-          height: 100vh;
-        }
 
-        #main {
-          display: grid;
-          height: 100%;
-          grid-template-columns: 300px calc(100% - 300px);
-          grid-template-rows: 80px calc(100% - 160px) 80px;
-        }
-
-        #header {
-          background-color: #0d1e52;
-          text-align: left;
-          color: white;
-          padding: 2%;
-          grid-row: 1;
-          grid-column: 1 / 3;
-        }
-
-        #nav-bar {
-          grid-row: 2;
-          grid-column: 1;
-        }
-
-        #content {
-          grid-row: 2;
-          grid-column: 2;
-        }
-
-        #logInButton {
-          cursor: pointer;
-          border: 1px solid gray;
-          border-radius: 4px;
-          padding: 5px;
-          background: aliceblue;
-        }
-
-        #logInButton:hover {
-          background: aqua;
-        }
-        
-        #footer {
-        grid-column: 1 / 3;
-        background-color: #faba25;
-        align-content: center;
-        }
-
-        .centered {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-        }
-        
-        .component-margin {
-          margin: 10% 10%;
-        }
-
-        .globalContainer {
-          display: flex;
-          flex-flow: row nowrap;
-          align-items: stretch;
-        }
-
-        .navBar {
-          flex: 1 1 20%;
-        }
-        
-        .mainComponent {
-          flex: 50 10 80%;
-        }
       `
     ];
   }
 
-  _logIn () {
-    this._loggedIn = (Math.random() > .5);
-    if (!this._loggedIn) {
-        alert('try again!');
-    }
-  }
 
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
+    console.log("nav");
     return html`
-    ${this._loggedIn ? html`
-    <div id="main">
-        <div id="header" style="vertical-align: middle;">
-            Sesión de ALUMNO NOMBRE APELLIDO
-        </div>
-           
-        <div id="nav-bar"></div>
-           
-        <div id="content">
-            <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
-                 el nombre de la variable del componente (public) -->
-            <horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases> 
-        </div>
-        
-        <div id="footer">
-        </div>
-        
-    </div>
-    ` : html`
-    <div class="centered">
-        <span id="logInButton" @click="${this._logIn}">
-            Click here to try to log in 2 2 2 2!
-        </span>
-        Hola Javier
-    </div>`}
+        <div> USM </div>
+        <div> <input type = "text" value = "Buscar Q"/> </div>
+        <div> Nombre Apellido Apellido </div>
+      
     `;
   }
 
@@ -213,6 +106,5 @@ export class HomePage extends connect(store)(LitElement) {
   /* Esta función se ejecuta cada vez que el state cambia, se usa para leer la memoria. */
   stateChanged(state: RootState) {
     this._page = state.app!.page;
-    this._cursos = state.cursos!.cursos;
   }
 }

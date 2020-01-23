@@ -39,13 +39,9 @@ export const navigate: ActionCreator<ThunkResult> = (path: string) => (dispatch)
 
 const loadPage: ActionCreator<ThunkResult> = (page: string) => (dispatch) => {
   switch(page) {
-    case 'home':
-      import('../components/home').then((_module) => {
-        // Put code in here that you want to run every time when
-        // navigating to view1 after my-view1.js is loaded.
-      });
-      break;
     case 'main':
+      import('../components/menu');
+      import('../components/navbar');
       import('../components/main').then((_module) => {
         // Put code in here that you want to run every time when
         // navigating to view1 after my-view1.js is loaded.
