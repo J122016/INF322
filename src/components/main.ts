@@ -25,6 +25,10 @@ import { customCss } from './style';
 import { getAllCursos } from '../actions/cursos';
 import { ListaCursos } from '../reducers/cursos';
 
+import { getAllMigas } from '../actions/migas';
+import { StringMigas } from '../reducers/migas';
+//import {getAllDescriptions} from '../actions/description';    //Para busqueda?
+
 // These are the actions needed by this element.
 import {
   navigate,
@@ -40,6 +44,7 @@ import './snack-bar.js';
 
 // Aqui se importan los componentes.
 import './horario-clases';
+import './navegacion-pan';
 
 @customElement('main-page')
 export class MainPage extends connect(store)(LitElement) {
@@ -52,8 +57,14 @@ export class MainPage extends connect(store)(LitElement) {
   @property({type: String})
   private _page: string = '';
 
+  @property({type: String})
+  private _migas: StringMigas = {};
+
+  @property({type: String})
+  private _busqueda: string = 'INSERTAR BUSCADOR AQUI!!!';
+
   private appTitle : string = 'Siga';
-  
+
   static get styles() {
     return [customCss,
       css`
@@ -99,7 +110,7 @@ export class MainPage extends connect(store)(LitElement) {
         #logInButton:hover {
           background: aqua;
         }
-        
+
         #footer {
         grid-column: 1 / 3;
         background-color: #faba25;
@@ -112,17 +123,21 @@ export class MainPage extends connect(store)(LitElement) {
           justify-content: center;
           height: 100%;
         }
-        
+
         .component-margin {
           margin: 10% 10%
         }
-        
+
+        .breadcrumb-margin {
+            margin: 1% 1%
+        }
+
       `
     ];
   }
 
   _logIn () {
-    this._loggedIn = (Math.random() > .5);
+    this._loggedIn = (Math.random() > .0);
     if (!this._loggedIn) {
         alert('try again!');
     }
@@ -138,19 +153,29 @@ export class MainPage extends connect(store)(LitElement) {
     <div id="main">
         <div id="header" style="vertical-align: middle;">
             Sesión de ALUMNO NOMBRE APELLIDO
+            <!-- sector de migas de pan y busqueda-->
+
+            <!--CREAR UN COMPONENTE PARA LA BARRA DE BUSQUEDA -->
+            <busqueda class="component-margin" .busqueda="${this._busqueda}">BUSAUEDA</busqueda>
+            <br>
+            
+             <!-- AGREGAR CALCULO DE SUBNIVELES Y link's funcionales-->
+            <navegacion-pan class=" breadcrumb-margin" .migas="${this._migas}"></navegacion-pan>
         </div>
-           
-        <div id="nav-bar"></div>
-           
+
+        <div id="nav-bar">
+            <!-- sector menu, inicio ? -->
+        </div>
+
         <div id="content">
             <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
                  el nombre de la variable del componente (public) -->
-            <horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases> 
+            <horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>
         </div>
-        
+
         <div id="footer">
         </div>
-        
+
     </div>
     ` : html`
     <div class="centered">
@@ -177,6 +202,7 @@ export class MainPage extends connect(store)(LitElement) {
 
     // Cargando datos
     store.dispatch(getAllCursos());
+    store.dispatch(getAllMigas());
   }
 
   /* Esta función se ejecuta DESPUES de cada render. */
@@ -189,9 +215,9 @@ export class MainPage extends connect(store)(LitElement) {
         // This object also takes an image property, that points to an img src.
       });
     }
-    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar 
-     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que 
-     * para tomar algo de la página, por ejemplo la barra de navegación podemos: 
+    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar
+     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que
+     * para tomar algo de la página, por ejemplo la barra de navegación podemos:
         let navBar = this.shadowRoot.getElementById('nav-bar');
      * Así tenemos la navBar, si fuera un input podríamos leerlo con navBar.value */
   }
@@ -200,5 +226,7 @@ export class MainPage extends connect(store)(LitElement) {
   stateChanged(state: RootState) {
     this._page = state.app!.page;
     this._cursos = state.cursos!.cursos;
+    this._migas = state.migas!.migas;
+    //this._busqueda = state.app!.busqueda; //no estoy seguro
   }
 }

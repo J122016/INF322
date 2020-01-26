@@ -26,7 +26,7 @@ export interface AppState {
 }
 
 const INITIAL_STATE: AppState = {
-  page: '',
+  page: 'Loading',
   offline: false,
   drawerOpened: false,
   snackbarOpened: false,

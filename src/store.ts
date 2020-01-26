@@ -36,14 +36,18 @@ import { AppAction } from './actions/app.js';
 import cursos, { CursosState } from './reducers/cursos';
 import { CursosAction } from './actions/cursos';
 
+import migas, { MigasState } from './reducers/migas';
+import { MigasAction } from './actions/migas';
+
 // Este es el state principal, se define la estructura de datos...
 export interface RootState {
   app?: AppState;
   cursos?: CursosState;
+  migas?: MigasState;
 }
 
 // Se agrega el tipo de las acciones que creemos al tipo root.
-export type RootAction = AppAction | CursosAction;
+export type RootAction = AppAction | CursosAction | MigasAction;
 
 // Sets up a Chrome extension for time travel debugging.
 // See https://github.com/zalmoxisus/redux-devtools-extension for more information.
@@ -67,3 +71,4 @@ export const store = createStore(
 // Cargar reducers, aquí es donde se conectan los básicos, se pueden cargar a demanda tambien.
 store.addReducers({ app });
 store.addReducers({ cursos });
+store.addReducers({ migas });
