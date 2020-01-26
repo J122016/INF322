@@ -23,11 +23,6 @@ import { customCss } from './style';
 
 // Importen sus tipos de datos y funciones
 import { getAllCursos } from '../actions/cursos';
-import { ListaCursos } from '../reducers/cursos';
-
-import { getAllMigas } from '../actions/migas';
-import { StringMigas } from '../reducers/migas';
-//import {getAllDescriptions} from '../actions/description';    //Para busqueda?
 
 // These are the actions needed by this element.
 import {
@@ -44,12 +39,9 @@ import './snack-bar.js';
 
 // Aqui se importan los componentes.
 import './horario-clases';
-import './navegacion-pan';
 
-@customElement('main-page')
-export class MainPage extends connect(store)(LitElement) {
-  @property({type: Object})
-  private _cursos: ListaCursos = {};
+@customElement('side-menu')
+export class SideMenu extends connect(store)(LitElement) {
 
   @property({type: Boolean})
   private _loggedIn: boolean = false;
@@ -57,92 +49,37 @@ export class MainPage extends connect(store)(LitElement) {
   @property({type: String})
   private _page: string = '';
 
-  @property({type: String})
-  private _migas: StringMigas = {};
-
-  @property({type: String})
-  private _busqueda: string = 'INSERTAR BUSCADOR AQUI!!!';
-
   private appTitle : string = 'Siga';
-
+  
   static get styles() {
     return [customCss,
       css`
-        :host {
-          display: block;
-          height: 100vh;
-        }
-
-        #main {
-          height: 100%;
-          grid-template-columns: 300px calc(100% - 300px);
-          grid-template-rows: 80px calc(100% - 160px) 80px;
-        }
-
-        #header {
-          background-color: #0d1e52;
-          text-align: left;
-          color: white;
-          padding: 2%;
-          grid-row: 1;
-          grid-column: 1 / 3;
-          display: flex;
-          justify-content: space-between;
-        }
-
-        #content {
-          display: flex;
-          flex-flow: row nowrap;
-          align-items: stretch;
-        }
-
-        #logInButton {
-          cursor: pointer;
-          border: 1px solid gray;
-          border-radius: 4px;
-          padding: 5px;
-          background: aliceblue;
-        }
-
-        #logInButton:hover {
-          background: aqua;
-        }
-
-        #footer {
-        grid-column: 1 / 3;
-        background-color: #faba25;
-        align-content: center;
-        }
-
-        .centered {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-        }
-
-        .component-margin {
-          margin: 10% 10%
-          flex: 0 0 80%;
-        }
-
-        .breadcrumb-margin {
-            margin: 1% 1%
-        }
-
         .menu {
-          flex: 0 0 20%;
           background: #FABA25;
           color: white;
           display: flex;
           flex-flow: column nowrap;
+        }
+
+        .menu--item {
+          background: inherit;
+          color: black;
+          padding: 10px;
+          border: none;
+          font-weight: 700;
+          transition: all 1s;
+        }
+
+        .menu--item:hover {
+          background: #CA8A00;
+          color: white;
         }
       `
     ];
   }
 
   _logIn () {
-    this._loggedIn = (Math.random() > .0);
+    this._loggedIn = (Math.random() > .5);
     if (!this._loggedIn) {
         alert('try again!');
     }
@@ -154,34 +91,12 @@ export class MainPage extends connect(store)(LitElement) {
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-    ${this._loggedIn ? html`
-    <div id="main">
-    <nav-bar id="header" style="vertical-align: middle;"></nav-bar>
-            <!-- sector de migas de pan y busqueda-->
-            <!--CREAR UN COMPONENTE PARA LA BARRA DE BUSQUEDA -->
-            <busqueda class="component-margin" .busqueda="${this._busqueda}">BUSQUEDA</busqueda>
-            <br>
-             <!-- AGREGAR CALCULO DE SUBNIVELES Y link's funcionales-->
-            <navegacion-pan class=" breadcrumb-margin" .migas="${this._migas}"></navegacion-pan>
-        </div>
-
-        <div id="content">
-            <side-menu class="menu"> </side-menu>
-            <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
-                 el nombre de la variable del componente (public) -->
-            <horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>
-        </div>
-
-        <div id="footer">
-        </div>
-
-    </div>
-    ` : html`
-    <div class="centered">
-        <span id="logInButton" @click="${this._logIn}">
-            Click here to try to log in!
-        </span>
-    </div>`}
+      
+        <button class = "menu--item">Noticias</button>
+        <button class = "menu--item">Ramos</button>
+        <button class = "menu--item">Solicitudes Externas</button>
+        <button class = "menu--item">Enlaces Externos</button>
+      
     `;
   }
 
@@ -201,7 +116,6 @@ export class MainPage extends connect(store)(LitElement) {
 
     // Cargando datos
     store.dispatch(getAllCursos());
-    store.dispatch(getAllMigas());
   }
 
   /* Esta función se ejecuta DESPUES de cada render. */
@@ -214,9 +128,9 @@ export class MainPage extends connect(store)(LitElement) {
         // This object also takes an image property, that points to an img src.
       });
     }
-    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar
-     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que
-     * para tomar algo de la página, por ejemplo la barra de navegación podemos:
+    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar 
+     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que 
+     * para tomar algo de la página, por ejemplo la barra de navegación podemos: 
         let navBar = this.shadowRoot.getElementById('nav-bar');
      * Así tenemos la navBar, si fuera un input podríamos leerlo con navBar.value */
   }
@@ -224,8 +138,5 @@ export class MainPage extends connect(store)(LitElement) {
   /* Esta función se ejecuta cada vez que el state cambia, se usa para leer la memoria. */
   stateChanged(state: RootState) {
     this._page = state.app!.page;
-    this._cursos = state.cursos!.cursos;
-    this._migas = state.migas!.migas;
-    //this._busqueda = state.app!.busqueda; //no estoy seguro
   }
 }

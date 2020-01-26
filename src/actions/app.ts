@@ -29,7 +29,6 @@ type ThunkResult = ThunkAction<void, RootState, undefined, AppAction>;
 export const navigate: ActionCreator<ThunkResult> = (path: string) => (dispatch) => {
   // Extract the page name from path.
   const page = path === '/' ? 'main' : path.slice(1);
-
   // Any other info you might want to extract from the path (like page type),
   // you can do here
   dispatch(loadPage(page));
@@ -41,6 +40,8 @@ export const navigate: ActionCreator<ThunkResult> = (path: string) => (dispatch)
 const loadPage: ActionCreator<ThunkResult> = (page: string) => (dispatch) => {
   switch(page) {
     case 'main':
+      import('../components/menu');
+      import('../components/navbar');
       import('../components/main').then((_module) => {
         // Put code in here that you want to run every time when
         // navigating to view1 after my-view1.js is loaded.
