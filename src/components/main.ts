@@ -156,9 +156,9 @@ export class MainPage extends connect(store)(LitElement) {
             <!-- sector de migas de pan y busqueda-->
 
             <!--CREAR UN COMPONENTE PARA LA BARRA DE BUSQUEDA -->
-            <busqueda class="component-margin" .busqueda="${this._busqueda}">BUSAUEDA</busqueda>
+            <busqueda class="component-margin" .busqueda="${this._busqueda}">BUSQUEDA</busqueda>
             <br>
-            
+
              <!-- AGREGAR CALCULO DE SUBNIVELES Y link's funcionales-->
             <navegacion-pan class=" breadcrumb-margin" .migas="${this._migas}"></navegacion-pan>
         </div>
