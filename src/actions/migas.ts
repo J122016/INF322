@@ -23,15 +23,21 @@ export type MigasAction = ActionGetMigas;
 type ThunkResult = ThunkAction<void, RootState, undefined, MigasAction>;
 
 const MIGAS_LIST = [
-  {"nivel":0, "nombre": 'SIGA'},
-  {"nivel":1, "nombre": 'MAIN'},
-  {"nivel":2, "nombre": 'CURSOS'}
+  {"id":0, "nombre": 'SIGA', "hijos": ['NOTICIAS', 'RAMOS', 'SOLICITUDES EXTERNAS', 'ENLACES EXTERNOS']},
+  {"id":1, "nombre": 'NOTICIAS', "hijos": []},
+  {"id":2, "nombre": 'RAMOS', "hijos": ['CURSOS']},
+  {"id":3, "nombre": 'SOLICITUDES EXTERNAS', "hijos": ['SOLICITUD 1']},
+  {"id":4, "nombre": 'ENLACES EXTERNOS', "hijos": ['ENLACE 1']},
+  {"id":5, "nombre": 'CURSOS', "hijos": ['DETALLE']},
+  {"id":6, "nombre": 'ENLACE 1', "hijos": []},
+  {"id":7, "nombre": 'SOLICITUD 1', "hijos": []},
+  {"id":8, "nombre": 'DETALLE', "hijos": []}
 ];
 
 export const getAllMigas: ActionCreator<ThunkResult> = () => (dispatch) => {
   const migas = MIGAS_LIST.reduce((obj, miga) => {
     //obj[miga.anterior] = {'anterior': miga.anterior.concat('>').concat(miga.nueva), 'nueva': miga.nueva, 'retroceso': true};
-    obj[miga.nivel] = miga;
+    obj[miga.nombre] = miga;
     return obj
 }, {} as StringMigas);
 

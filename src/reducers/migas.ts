@@ -26,12 +26,13 @@ export interface StringMigas {
 }
 
 export interface Miga {
-  nivel: number;
+  id: number;
   nombre: string;
+  hijos: string[];
 }
 
 const INITIAL_STATE: MigasState = {
-  migas: {}, // Ej: {"nivel":0,"nombre": 'MAIN(INIT)'}
+  migas: {},
 };
 
 const migas: Reducer<MigasState, RootAction> = (state = INITIAL_STATE, action) => {

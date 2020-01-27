@@ -92,6 +92,7 @@ export class MainPage extends connect(store)(LitElement) {
         #nav-bar {
           grid-row: 2;
           grid-column: 1;
+          background-color: orange;
         }
 
         #content {
@@ -129,7 +130,8 @@ export class MainPage extends connect(store)(LitElement) {
         }
 
         .breadcrumb-margin {
-            margin: 1% 1%
+            /*column-count: 1;
+            margin: 1% 1%*/
         }
 
       `
@@ -151,20 +153,20 @@ export class MainPage extends connect(store)(LitElement) {
     return html`
     ${this._loggedIn ? html`
     <div id="main">
-        <div id="header" style="vertical-align: middle;">
-            Sesión de ALUMNO NOMBRE APELLIDO
-            <!-- sector de migas de pan y busqueda-->
+        <div id="header" style="vertical-align: middle;column-count: 3">
+            <div>USM🏠</div>
 
             <!--CREAR UN COMPONENTE PARA LA BARRA DE BUSQUEDA -->
-            <busqueda class="component-margin" .busqueda="${this._busqueda}">BUSQUEDA</busqueda>
-            <br>
+            <busqueda class="component-margin" .busqueda="${this._busqueda}">
+                🔎<input type = "text" value = "Buscar Q"/>
+            </busqueda>
 
-             <!-- AGREGAR CALCULO DE SUBNIVELES Y link's funcionales-->
-            <navegacion-pan class=" breadcrumb-margin" .migas="${this._migas}"></navegacion-pan>
+            <div>Sesión de ALUMNO NOMBRE APELLIDO</div>
         </div>
 
         <div id="nav-bar">
-            <!-- sector menu, inicio ? -->
+            <!-- AGREGAR CALCULO DE SUBNIVELES Y link's funcionales-->
+           <navegacion-pan class=" breadcrumb-margin" .migas="${this._migas}"></navegacion-pan>
         </div>
 
         <div id="content">
