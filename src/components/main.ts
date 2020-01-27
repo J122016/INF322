@@ -155,19 +155,8 @@ export class MainPage extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
     ${this._loggedIn ? html`
+    <!--Bosquejo -->
     <nav-bar id="header" style="vertical-align: middle;"></nav-bar>
-
-    <!--- Esto funcionaba con diseño de Master, ahora no... (revisar)
-    <div id="main">
-        <div id="header" style="vertical-align: middle;">
-            Sesión de ALUMNO NOMBRE APELLIDO-->
-            <!-- sector de migas de pan y busqueda-->
-            <!-- CREAR UN COMPONENTE PARA LA BARRA DE BUSQUEDA -->
-            <!--<busqueda class="component-margin" .busqueda="${this._busqueda}">BUSQUEDA</busqueda> <br> -->
-
-             <!-- AGREGAR CALCULO DE SUBNIVELES Y link's funcionales -->
-            <!-- <navegacion-pan class=" breadcrumb-margin" .migas="${this._migas}"></navegacion-pan>-->
-        <!--</div>-->
 
         <div id="content">
             <side-menu class="menu"> </side-menu>
