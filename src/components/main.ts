@@ -161,7 +161,7 @@ export class MainPage extends connect(store)(LitElement) {
                 🔎<input type = "text" value = "Buscar Q"/>
             </busqueda>
 
-            <div>Sesión de ALUMNO NOMBRE APELLIDO</div>
+            <div>Sesión de alumno NOMBRE APELLIDO</div>
         </div>
 
         <div id="nav-bar">
