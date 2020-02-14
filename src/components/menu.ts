@@ -43,17 +43,22 @@ import './horario-clases';
 @customElement('side-menu')
 export class SideMenu extends connect(store)(LitElement) {
 
-  @property({type: Boolean})
-  private _loggedIn: boolean = false;
-
   @property({type: String})
   private _page: string = '';
+
+  @property({type: String})
+  private _active: string = '';
 
   private appTitle : string = 'Siga';
   
   static get styles() {
     return [customCss,
       css`
+
+        @keyframes fadeIn {
+          from {opacity: 0.0;}
+          to   {opacity 1.0;}
+        }
         .menu {
           background: #FABA25;
           color: white;
@@ -67,22 +72,48 @@ export class SideMenu extends connect(store)(LitElement) {
           padding: 10px;
           border: none;
           font-weight: 700;
-          transition: all 1s;
+          transition: all 0.3s;
         }
 
         .menu--item:hover {
           background: #CA8A00;
           color: white;
         }
+
+        .menu--child {
+          padding-left: 30px;
+          transition all 0.3s;
+          background: #FFDA45;
+        }
+
+        .invisible {
+          display: none;
+          opacity: 0;
+        }
+
+        .visible {
+          animation: fadeIn 0.5s;
+        }
       `
     ];
   }
 
-  _logIn () {
-    this._loggedIn = (Math.random() > .5);
-    if (!this._loggedIn) {
-        alert('try again!');
-    }
+  _activate () {
+    this._active = '';
+  }
+
+  _activateRamos () {
+    this._active = 'Ramos';
+    console.log('Ramos');
+  }
+
+  _activateSolicitudesExternas () {
+    this._active = 'Solicitudes Externas';
+    console.log('Solicitudes  ');
+  }
+
+  _activateEnlacesExternos () {
+    this._active = 'Enlaces Externos';
   }
 
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
@@ -92,10 +123,20 @@ export class SideMenu extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
       
-        <button class = "menu--item">Noticias</button>
-        <button class = "menu--item">Ramos</button>
-        <button class = "menu--item">Solicitudes Externas</button>
-        <button class = "menu--item">Enlaces Externos</button>
+        <button class = "menu--item" @click="${this._activate}">Noticias</button>
+        <button class = "menu--item" @click="${this._activateRamos}">Ramos</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}>Búsqueda de ramos</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}>Asignaturas inscritas</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}>Inscripción</button>
+        <button class = "menu--item" @click="${this._activateSolicitudesExternas}">Solicitudes Externas</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Certificados</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Cambio de mención</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Solicitudes Académicas y Peticiones</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Matrícula Sin Ramos</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Autorización Académica</button>
+        <button class = "menu--item" @click="${this._activateEnlacesExternos}">Enlaces Externos</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}>Sireb</button>
+          <button class = ${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}>Aula</button>
       
     `;
   }

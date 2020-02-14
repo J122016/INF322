@@ -56,13 +56,13 @@ export class MainPage extends connect(store)(LitElement) {
 
   @property({type: String})
   private _page: string = '';
-
+  
   @property({type: String})
   private _migas: StringMigas = {};
 
   @property({type: String})
-  private _busqueda: string = 'INSERTAR BUSQUEDA AQUI!!!';
-
+  private _busqueda: string = 'Insertar busqueda aqui!!!';
+  
   private appTitle : string = 'Siga';
 
   static get styles() {
