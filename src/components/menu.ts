@@ -50,7 +50,7 @@ export class SideMenu extends connect(store)(LitElement) {
   private _active: string = '';
 
   private appTitle : string = 'Siga';
-  
+
   static get styles() {
     return [customCss,
       css`
@@ -59,6 +59,11 @@ export class SideMenu extends connect(store)(LitElement) {
           from {opacity: 0.0;}
           to   {opacity 1.0;}
         }
+        @keyframes fadeOut {
+          from {opacity: 1.0;}
+          to   {opacity: 0.0;}
+        }
+
         .menu {
           background: #FABA25;
           color: white;
@@ -82,38 +87,42 @@ export class SideMenu extends connect(store)(LitElement) {
 
         .menu--child {
           padding-left: 30px;
+          text-align: left;
           transition all 0.3s;
           background: #FFDA45;
         }
 
         .invisible {
-          display: none;
-          opacity: 0;
+          overflow: hidden;
+          height: 0;
+          padding: 0;
+          animation: fadeOut 0.8s;
         }
 
         .visible {
-          animation: fadeIn 0.5s;
+          animation: fadeIn 0.8s;
         }
       `
     ];
   }
 
-  _activate () {
-    this._active = '';
+  _activateMenu (button:object) {
+    // recive como parametro el evento click, se ignora error de atributo no encontrado (hacer interfaz)
+    //@ts-ignore
+    let id : string = button.path[0].id;
+    switch (id){
+        case 'Ramos_Menu': {this._active = ((this._active == 'Ramos') ? '' : 'Ramos') ; break;}
+        case 'Solicitudes_Menu': {this._active = ((this._active == 'Solicitudes Externas') ? '' : 'Solicitudes Externas') ; break;}
+        case 'Enlaces_Menu': {this._active = ((this._active == 'Enlaces Externos') ? '' : 'Enlaces Externos') ; break;}
+        default: {this._active = '' ; break;}
+    }
   }
 
-  _activateRamos () {
-    this._active = 'Ramos';
-    console.log('Ramos');
-  }
-
-  _activateSolicitudesExternas () {
-    this._active = 'Solicitudes Externas';
-    console.log('Solicitudes  ');
-  }
-
-  _activateEnlacesExternos () {
-    this._active = 'Enlaces Externos';
+  _redirect (button : object){
+    //Redirecciona a subseccion, ahora solo cambia nombre de pagina
+    //@ts-ignore
+    let id : string = button.path[0].innerText;
+    this._page = id;
   }
 
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
@@ -122,22 +131,22 @@ export class SideMenu extends connect(store)(LitElement) {
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-      
-        <button class = "menu--item" @click="${this._activate}">Noticias</button>
-        <button class = "menu--item" @click="${this._activateRamos}">Ramos</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}>Búsqueda de ramos</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}>Asignaturas inscritas</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}>Inscripción</button>
-        <button class = "menu--item" @click="${this._activateSolicitudesExternas}">Solicitudes Externas</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Certificados</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Cambio de mención</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Solicitudes Académicas y Peticiones</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Matrícula Sin Ramos</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}>Autorización Académica</button>
-        <button class = "menu--item" @click="${this._activateEnlacesExternos}">Enlaces Externos</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}>Sireb</button>
-          <button class = ${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}>Aula</button>
-      
+
+        <button id = 'Noticias_Menu' class = "menu--item" @click="${this._activateMenu}">Noticias</button>
+        <button id = 'Ramos_Menu' class = "menu--item" @click="${this._activateMenu}">Ramos</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Búsqueda de ramos</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Asignaturas inscritas</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Inscripción</button>
+        <button id = 'Solicitudes_Menu' class = "menu--item" @click="${this._activateMenu}">Solicitudes Externas</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Certificados</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Cambio de mención</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Solicitudes Académicas y Peticiones</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Matrícula Sin Ramos</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Autorización Académica</button>
+        <button id = 'Enlaces_Menu' class = "menu--item" @click="${this._activateMenu}">Enlaces Externos</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Sireb</button>
+          <button class = "${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Aula</button>
+
     `;
   }
 
