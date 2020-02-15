@@ -26,7 +26,7 @@ import { getAllCursos } from '../actions/cursos';
 import { ListaCursos } from '../reducers/cursos';
 
 import { getAllMigas } from '../actions/migas';
-import { StringMigas } from '../reducers/migas';
+//import { StringMigas } from '../reducers/migas';
 //import {getAllDescriptions} from '../actions/description';    //Para busqueda?
 
 // These are the actions needed by this element.
@@ -56,13 +56,13 @@ export class MainPage extends connect(store)(LitElement) {
 
   @property({type: String})
   private _page: string = '';
-  
-  @property({type: String})
-  private _migas: StringMigas = {};
+
+  /*@property({type: String})
+  private _migas: StringMigas = {};*/
 
   @property({type: String})
-  private _busqueda: string = 'Insertar busqueda aqui!!!';
-  
+  private _busqueda: string = '';
+
   private appTitle : string = 'Siga';
 
   static get styles() {
@@ -148,6 +148,11 @@ export class MainPage extends connect(store)(LitElement) {
     }
   }
 
+  private callbackFunction = (mensaje: string) => {
+    this._busqueda = mensaje;
+    this.render();
+  }
+
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
@@ -155,11 +160,10 @@ export class MainPage extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
     ${this._loggedIn ? html`
-    <!--Bosquejo -->
-    <nav-bar id="header" style="vertical-align: middle;"></nav-bar>
+    <nav-bar id="header" class="navbar" style="vertical-align: middle;" .parentCallback = "${this.callbackFunction}"></nav-bar>
 
         <div id="content">
-            <side-menu class="menu"> </side-menu>
+            <side-menu class="menu" ._busqueda="${this._busqueda}"> </side-menu>
             <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
                  el nombre de la variable del componente (public) -->
             <horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>
@@ -218,7 +222,6 @@ export class MainPage extends connect(store)(LitElement) {
   stateChanged(state: RootState) {
     this._page = state.app!.page;
     this._cursos = state.cursos!.cursos;
-    this._migas = state.migas!.migas;
-    //this._busqueda = state.app!.busqueda; //no estoy seguro
+    //this._migas = state.migas!.migas;
   }
 }

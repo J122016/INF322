@@ -35,6 +35,7 @@ import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/app-layout/app-scroll-effects/effects/waterfall.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+
 import './snack-bar.js';
 
 @customElement('nav-bar')
@@ -43,28 +44,48 @@ export class Navbar extends connect(store)(LitElement) {
   @property({type: String})
   private _page: string = '';
 
+  @property({type: String})
+  public _busqueda: string = '';
+
+  @property({type: Object})
+  public parentCallback: any;
+
   private appTitle : string = 'Siga';
-  
+
   static get styles() {
     return [customCss,
       css`
 
+      .search input[type=text] {
+          padding: 6px;
+          border: none;
+          margin-top: 8px;
+          margin-right: 16px;
+          font-size: 17px;
+          text-align: center;
+      }
       `
     ];
   }
 
+  _buscar(input:Object){
+      //@ts-ignore
+      let enBusqueda : string = input.path[0].value;
+      this._busqueda = enBusqueda.toLowerCase();
+      this.parentCallback(this._busqueda);
+  }
 
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
-    console.log("nav");
     return html`
-        <div> USM </div>
-        <div> <input type = "text" value = "Buscar Q"/> </div>
+        <div> USM 🏠</div>
+        <div class ="search">
+            <input id ="campo_busqueda" @keyup = "${this._buscar}" type = "text" placeholder = "Busqueda🔍"/></div>
         <div> Nombre Apellido Apellido </div>
-      
+
     `;
   }
 
@@ -96,9 +117,9 @@ export class Navbar extends connect(store)(LitElement) {
         // This object also takes an image property, that points to an img src.
       });
     }
-    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar 
-     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que 
-     * para tomar algo de la página, por ejemplo la barra de navegación podemos: 
+    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar
+     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que
+     * para tomar algo de la página, por ejemplo la barra de navegación podemos:
         let navBar = this.shadowRoot.getElementById('nav-bar');
      * Así tenemos la navBar, si fuera un input podríamos leerlo con navBar.value */
   }

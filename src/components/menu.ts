@@ -49,6 +49,9 @@ export class SideMenu extends connect(store)(LitElement) {
   @property({type: String})
   private _active: string = '';
 
+  @property({type: String})
+  public _busqueda: string = '';
+
   private appTitle : string = 'Siga';
 
   static get styles() {
@@ -102,11 +105,15 @@ export class SideMenu extends connect(store)(LitElement) {
         .visible {
           animation: fadeIn 0.8s;
         }
+        .menu--answer {
+          animation: fadeIn 0.8s;
+          background: red;
+        }
       `
     ];
   }
 
-  _activateMenu (button:object) {
+  _activateMenu (button:Object) {
     // recive como parametro el evento click, se ignora error de atributo no encontrado (hacer interfaz)
     //@ts-ignore
     let id : string = button.path[0].id;
@@ -132,7 +139,7 @@ export class SideMenu extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
 
-        <button id = 'Noticias_Menu' class = "menu--item" @click="${this._activateMenu}">Noticias</button>
+        <button id = 'Noticias_Menu' class = "menu--item" @click="${this._redirect}">Noticias</button>
         <button id = 'Ramos_Menu' class = "menu--item" @click="${this._activateMenu}">Ramos</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Búsqueda de ramos</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Asignaturas inscritas</button>
@@ -178,9 +185,50 @@ export class SideMenu extends connect(store)(LitElement) {
         // This object also takes an image property, that points to an img src.
       });
     }
-    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar 
-     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que 
-     * para tomar algo de la página, por ejemplo la barra de navegación podemos: 
+
+    //Buscador coincidencias busqueda, se ignoran errores obtenidos de extracción del DOM
+    if (changedProps.has('_busqueda')) {
+        let i = 0;
+        while (i < 14){ //secciones.lenght){
+            //@ts-ignore
+            let seccion = this.shadowRoot.children[i].innerText.toLowerCase();
+
+            if (this._busqueda != ''){
+                if (seccion.includes(this._busqueda)){
+                    //@ts-ignore
+                    if (this.shadowRoot.children[i].className == 'menu--item menu--child invisible'){
+                        //@ts-ignore
+                        this.shadowRoot.children[i].className = 'menu--item menu--child visible';
+                    }
+                    //@ts-ignore
+                    this.shadowRoot.children[i].style.display = "block"
+
+                }else{
+                    //@ts-ignore
+                    this.shadowRoot.children[i].style.display = "none"
+                }
+
+            }else{
+                //@ts-ignore
+                if (this.shadowRoot.children[i].className.includes('menu--item menu--child')){
+                    //@ts-ignore
+                    this.shadowRoot.children[i].className = 'menu--item menu--child invisible';
+                }
+                //@ts-ignore
+                this.shadowRoot.children[i].style.display = "block"
+            }
+            i++;
+        }
+
+        //if ('noticias'.includes(this._busqueda)){
+        //    this.shadowRoot.getElementById('Noticias_Menu').className = "menu--answer";
+        //}else{
+        //    this.shadowRoot.getElementById('Noticias_Menu').className = "menu--item";
+        //}
+    }
+    /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar
+     * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que
+     * para tomar algo de la página, por ejemplo la barra de navegación podemos:
         let navBar = this.shadowRoot.getElementById('nav-bar');
      * Así tenemos la navBar, si fuera un input podríamos leerlo con navBar.value */
   }
