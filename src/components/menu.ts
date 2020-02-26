@@ -113,10 +113,10 @@ export class SideMenu extends connect(store)(LitElement) {
     ];
   }
 
-  _activateMenu (button:Object) {
-    // recive como parametro el evento click, se ignora error de atributo no encontrado (hacer interfaz)
+  _activateMenu (event:MouseEvent) {
+    // recibe como parametro el evento click, se ignora error de atributo no encontrado (hacer interfaz)
     //@ts-ignore
-    let id : string = button.path[0].id;
+    let id : string = event.target.id;
     switch (id){
         case 'Ramos_Menu': {this._active = ((this._active == 'Ramos') ? '' : 'Ramos') ; break;}
         case 'Solicitudes_Menu': {this._active = ((this._active == 'Solicitudes Externas') ? '' : 'Solicitudes Externas') ; break;}
@@ -125,10 +125,10 @@ export class SideMenu extends connect(store)(LitElement) {
     }
   }
 
-  _redirect (button : object){
+  _redirect (event : MouseEvent){
     //Redirecciona a subseccion, ahora solo cambia nombre de pagina
     //@ts-ignore
-    let id : string = button.path[0].innerText;
+    let id : string = event.target.innerText;
     this._page = id;
   }
 
