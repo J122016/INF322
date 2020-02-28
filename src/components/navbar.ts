@@ -75,13 +75,16 @@ export class Navbar extends connect(store)(LitElement) {
       this.parentCallback(this._busqueda);
   }
 
+  _home(event : MouseEvent) {
+    this._page = "Main";
+  }
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-        <div> USM 🏠</div>
+        <div @click = "${this._home}"> USM 🏠 </div>
         <div class ="search">
             <input id ="campo_busqueda" @keyup = "${this._buscar}" type = "text" placeholder = "Busqueda🔍"/></div>
         <div> Nombre Apellido Apellido </div>

@@ -109,6 +109,9 @@ export class SideMenu extends connect(store)(LitElement) {
           animation: fadeIn 0.8s;
           background: red;
         }
+        .chosen {
+          border: solid black 5px;
+        }
       `
     ];
   }
@@ -118,11 +121,17 @@ export class SideMenu extends connect(store)(LitElement) {
     //@ts-ignore
     let id : string = event.target.id;
     switch (id){
+        case 'Noticias_Menu': {this._active = ((this._active == 'Noticias') ? '' : 'Noticias') ; break;}
         case 'Ramos_Menu': {this._active = ((this._active == 'Ramos') ? '' : 'Ramos') ; break;}
         case 'Solicitudes_Menu': {this._active = ((this._active == 'Solicitudes Externas') ? '' : 'Solicitudes Externas') ; break;}
         case 'Enlaces_Menu': {this._active = ((this._active == 'Enlaces Externos') ? '' : 'Enlaces Externos') ; break;}
         default: {this._active = '' ; break;}
     }
+  }
+
+  _activateAndRedirect (event : MouseEvent){
+    this._activateMenu(event);
+    this._redirect(event);
   }
 
   _redirect (event : MouseEvent){
@@ -139,18 +148,18 @@ export class SideMenu extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
 
-        <button id = 'Noticias_Menu' class = "menu--item" @click="${this._redirect}">Noticias</button>
-        <button id = 'Ramos_Menu' class = "menu--item" @click="${this._activateMenu}">Ramos</button>
+        <button id = 'Noticias_Menu' class = "menu--item${(this._active == 'Noticias') ? ' chosen' : ''}" @click="${this._activateAndRedirect}">Noticias</button>
+        <button id = 'Ramos_Menu' class = "menu--item${(this._active == 'Ramos') ? ' chosen' : ''}" @click="${this._activateMenu}">Ramos</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Búsqueda de ramos</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Asignaturas inscritas</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Inscripción</button>
-        <button id = 'Solicitudes_Menu' class = "menu--item" @click="${this._activateMenu}">Solicitudes Externas</button>
+        <button id = 'Solicitudes_Menu' class = "menu--item${(this._active == 'Solicitudes Externas') ? ' chosen' : ''}" @click="${this._activateMenu}">Solicitudes Externas</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Certificados</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Cambio de mención</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Solicitudes Académicas y Peticiones</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Matrícula Sin Ramos</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Autorización Académica</button>
-        <button id = 'Enlaces_Menu' class = "menu--item" @click="${this._activateMenu}">Enlaces Externos</button>
+        <button id = 'Enlaces_Menu' class = "menu--item${(this._active == 'Enlaces Externos') ? ' chosen' : ''}" @click="${this._activateMenu}">Enlaces Externos</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Sireb</button>
           <button class = "${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Aula</button>
 
