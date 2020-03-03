@@ -50,6 +50,9 @@ export class Navbar extends connect(store)(LitElement) {
   @property({type: Object})
   public parentCallback: any;
 
+  @property({type: Object})
+  public pageCall: any;
+
   private appTitle : string = 'Siga';
 
   static get styles() {
@@ -75,14 +78,13 @@ export class Navbar extends connect(store)(LitElement) {
       this.parentCallback(this._busqueda);
   }
 
-  _home(event : MouseEvent) {
-    this._page = "Main";
+  _home() {
+    this.pageCall("Inicio");
   }
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
   protected render() {
-    /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
         <div @click = "${this._home}"> USM 🏠 </div>
         <div class ="search">
@@ -112,6 +114,7 @@ export class Navbar extends connect(store)(LitElement) {
 
   /* Esta función se ejecuta DESPUES de cada render. */
   protected updated(changedProps: PropertyValues) {
+    //console.log("NAV",changedProps);  //Debug updates
     if (changedProps.has('_page')) {
       const pageTitle = this.appTitle + ' - ' + this._page;
       updateMetadata({

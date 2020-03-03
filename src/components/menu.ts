@@ -52,6 +52,9 @@ export class SideMenu extends connect(store)(LitElement) {
   @property({type: String})
   public _busqueda: string = '';
 
+  @property({type: Object})
+  public pageCall: any;
+
   private appTitle : string = 'Siga';
 
   static get styles() {
@@ -130,8 +133,8 @@ export class SideMenu extends connect(store)(LitElement) {
   }
 
   _activateAndRedirect (event : MouseEvent){
-    this._activateMenu(event);
     this._redirect(event);
+    this._activateMenu(event);
   }
 
   _redirect (event : MouseEvent){
@@ -139,6 +142,9 @@ export class SideMenu extends connect(store)(LitElement) {
     //@ts-ignore
     let id : string = event.target.innerText;
     this._page = id;
+
+    //solucion momentanea? por no actualizacion de _page
+    this.pageCall(this._page);
   }
 
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
@@ -186,6 +192,7 @@ export class SideMenu extends connect(store)(LitElement) {
 
   /* Esta función se ejecuta DESPUES de cada render. */
   protected updated(changedProps: PropertyValues) {
+    //console.log("MENU",changedProps); //Debug updates
     if (changedProps.has('_page')) {
       const pageTitle = this.appTitle + ' - ' + this._page;
       updateMetadata({
@@ -201,6 +208,7 @@ export class SideMenu extends connect(store)(LitElement) {
         while (i < 14){ //secciones.lenght){
             //@ts-ignore
             let seccion = this.shadowRoot.children[i].innerText.toLowerCase();
+            this._active = '';
 
             if (this._busqueda != ''){
                 if (seccion.includes(this._busqueda)){
@@ -228,12 +236,6 @@ export class SideMenu extends connect(store)(LitElement) {
             }
             i++;
         }
-
-        //if ('noticias'.includes(this._busqueda)){
-        //    this.shadowRoot.getElementById('Noticias_Menu').className = "menu--answer";
-        //}else{
-        //    this.shadowRoot.getElementById('Noticias_Menu').className = "menu--item";
-        //}
     }
     /* Si queremos modificar la página o leer el contenido que hay en algún input debemos trabajar
      * directamente con el DOM element. PERO cada elemento tiene su propio shadowRoot, por lo que

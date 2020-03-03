@@ -25,8 +25,6 @@ import { customCss } from './style';
 import { getAllCursos } from '../actions/cursos';
 import { ListaCursos } from '../reducers/cursos';
 
-import { getAllMigas } from '../actions/migas';
-//import { StringMigas } from '../reducers/migas';
 //import {getAllDescriptions} from '../actions/description';    //Para busqueda?
 
 // These are the actions needed by this element.
@@ -44,7 +42,6 @@ import './snack-bar.js';
 
 // Aqui se importan los componentes.
 import './horario-clases';
-import './navegacion-pan';
 
 @customElement('main-page')
 export class MainPage extends connect(store)(LitElement) {
@@ -57,9 +54,6 @@ export class MainPage extends connect(store)(LitElement) {
   @property({type: String})
   private _page: string = '';
 
-  /*@property({type: String})
-  private _migas: StringMigas = {};*/
-
   @property({type: String})
   private _busqueda: string = '';
 
@@ -71,6 +65,11 @@ export class MainPage extends connect(store)(LitElement) {
         :host {
           display: block;
           height: 100vh;
+        }
+
+        @keyframes fadeIn {
+          from {opacity: 0.0;}
+          to   {opacity 1.0;}
         }
 
         #main {
@@ -122,8 +121,9 @@ export class MainPage extends connect(store)(LitElement) {
         }
 
         .component-margin {
-          margin: 10% 10%
-          flex: 0 0 80%;
+            align-self: center;
+            margin: auto;
+            animation: fadeIn 0.5s;
         }
 
         .breadcrumb-margin {
@@ -153,6 +153,25 @@ export class MainPage extends connect(store)(LitElement) {
     this.render();
   }
 
+  //Solucion alternativa, no se actualiza _page cuando cambia en componente interior
+  private pageCallbackFunction = (mensaje: string) => {
+    this._page = mensaje;
+    this.render();
+  }
+
+  _section(){
+      //Opcion 1 switches, retornando el componente (mientras probando con html)
+      switch (this._page){
+          case 'Noticias': {return html`<div class = "component-margin"><p>Noticias importantes para el usuario</p><p>Documentos con información general</p></div>`; break;}
+          case 'Búsqueda de ramos': {return html `<horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>`; break;}
+          case 'Seccion ejemplo': {return html`<div class = "component-margin">retornar componente sección ejemplo</div>` ; break;}
+          default: {return html`<div class = "component-margin">${this._page}</div>` ; break;}
+      }
+
+      //Opcion 2 usando mismo nombre de pagina - requiere modificar nombres de componentes para que coincidan, ejemplo:
+      //return html`<"${this._page}">NEWS</"${this._page}">`;
+  }
+
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
@@ -160,13 +179,13 @@ export class MainPage extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
     ${this._loggedIn ? html`
-    <nav-bar id="header" class="navbar" style="vertical-align: middle;" .parentCallback = "${this.callbackFunction}"></nav-bar>
+    <nav-bar id="header" class="navbar" style="vertical-align: middle;" .pageCall="${this.pageCallbackFunction}" .parentCallback = "${this.callbackFunction}"></nav-bar>
 
         <div id="content">
-            <side-menu class="menu" ._busqueda="${this._busqueda}"> </side-menu>
+            <side-menu class="menu" .pageCall="${this.pageCallbackFunction}" ._busqueda="${this._busqueda}"> </side-menu>
             <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
                  el nombre de la variable del componente (public) -->
-            <horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>
+            ${this._section()}
         </div>
 
         <div id="footer">
@@ -198,11 +217,11 @@ export class MainPage extends connect(store)(LitElement) {
 
     // Cargando datos
     store.dispatch(getAllCursos());
-    store.dispatch(getAllMigas());
   }
 
   /* Esta función se ejecuta DESPUES de cada render. */
   protected updated(changedProps: PropertyValues) {
+    //console.log("BOSS",this._page);   //Debug updates
     if (changedProps.has('_page')) {
       const pageTitle = this.appTitle + ' - ' + this._page;
       updateMetadata({
@@ -222,6 +241,5 @@ export class MainPage extends connect(store)(LitElement) {
   stateChanged(state: RootState) {
     this._page = state.app!.page;
     this._cursos = state.cursos!.cursos;
-    //this._migas = state.migas!.migas;
   }
 }
