@@ -44,12 +44,6 @@ export class Navbar extends connect(store)(LitElement) {
   @property({type: String})
   private _page: string = '';
 
-  @property({type: String})
-  public _busqueda: string = '';
-
-  @property({type: Object})
-  public parentCallback: any;
-
   @property({type: Object})
   public pageCall: any;
 
@@ -58,24 +52,8 @@ export class Navbar extends connect(store)(LitElement) {
   static get styles() {
     return [customCss,
       css`
-
-      .search input[type=text] {
-          padding: 6px;
-          border: none;
-          margin-top: 8px;
-          margin-right: 16px;
-          font-size: 17px;
-          text-align: center;
-      }
       `
     ];
-  }
-
-  _buscar(input:Object){
-      //@ts-ignore
-      let enBusqueda : string = input.path[0].value;
-      this._busqueda = enBusqueda.toLowerCase();
-      this.parentCallback(this._busqueda);
   }
 
   _home() {
@@ -87,8 +65,6 @@ export class Navbar extends connect(store)(LitElement) {
   protected render() {
     return html`
         <div @click = "${this._home}"> USM 🏠 </div>
-        <div class ="search">
-            <input id ="campo_busqueda" @keyup = "${this._buscar}" type = "text" placeholder = "Busqueda🔍"/></div>
         <div> Nombre Apellido Apellido </div>
 
     `;

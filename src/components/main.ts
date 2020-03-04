@@ -54,9 +54,6 @@ export class MainPage extends connect(store)(LitElement) {
   @property({type: String})
   private _page: string = '';
 
-  @property({type: String})
-  private _busqueda: string = '';
-
   private appTitle : string = 'Siga';
 
   static get styles() {
@@ -70,6 +67,10 @@ export class MainPage extends connect(store)(LitElement) {
         @keyframes fadeIn {
           from {opacity: 0.0;}
           to   {opacity 1.0;}
+        }
+        @keyframes fadeOut {
+          from {opacity: 1.0;}
+          to   {opacity 0.0;}
         }
 
         #main {
@@ -131,11 +132,14 @@ export class MainPage extends connect(store)(LitElement) {
         }
 
         .menu {
-          flex: 0 0 20%;
-          background: #FABA25;
-          color: white;
-          display: flex;
-          flex-flow: column nowrap;
+            max-width: 300px;
+            width: 33%;
+            min-width: 120px;
+            flex: 0 0 auto;
+            background: #FABA25;
+            color: white;
+            display: flex;
+            flex-flow: column nowrap;
         }
       `
     ];
@@ -146,11 +150,6 @@ export class MainPage extends connect(store)(LitElement) {
     if (!this._loggedIn) {
         alert('try again!');
     }
-  }
-
-  private callbackFunction = (mensaje: string) => {
-    this._busqueda = mensaje;
-    this.render();
   }
 
   //Solucion alternativa, no se actualiza _page cuando cambia en componente interior
@@ -179,10 +178,10 @@ export class MainPage extends connect(store)(LitElement) {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
     ${this._loggedIn ? html`
-    <nav-bar id="header" class="navbar" style="vertical-align: middle;" .pageCall="${this.pageCallbackFunction}" .parentCallback = "${this.callbackFunction}"></nav-bar>
+    <nav-bar id="header" class="navbar" style="vertical-align: middle;" .pageCall="${this.pageCallbackFunction}"></nav-bar>
 
         <div id="content">
-            <side-menu class="menu" .pageCall="${this.pageCallbackFunction}" ._busqueda="${this._busqueda}"> </side-menu>
+            <side-menu class="menu" .pageCall="${this.pageCallbackFunction}"> </side-menu>
             <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
                  el nombre de la variable del componente (public) -->
             ${this._section()}

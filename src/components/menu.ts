@@ -108,19 +108,41 @@ export class SideMenu extends connect(store)(LitElement) {
         .visible {
           animation: fadeIn 0.8s;
         }
+
         .menu--answer {
           animation: fadeIn 0.8s;
           background: red;
         }
+
         .chosen {
           border: solid black 5px;
+        }
+
+        .search {
+            height: 30px;
+            margin: 2%;
+            border: 0px;
+            padding: 0px;
+            border-radius: 30px;
+            text-align: center;
+            text-align-last: center;
+            font-size: 17px;
+        }
+
+        .hr {
+            width: 80%;
+            align: center;
+            border: none;
+            border-bottom: 1px solid #CA8A00;
         }
       `
     ];
   }
 
+  //Activa subsecciones, si esta activo el buscador no se activa bien :( revisar...
   _activateMenu (event:MouseEvent) {
     // recibe como parametro el evento click, se ignora error de atributo no encontrado (hacer interfaz)
+    this._busqueda = '';
     //@ts-ignore
     let id : string = event.target.id;
     switch (id){
@@ -137,8 +159,8 @@ export class SideMenu extends connect(store)(LitElement) {
     this._activateMenu(event);
   }
 
+  //Redirecciona a subseccion, cambiando nombre de pagina
   _redirect (event : MouseEvent){
-    //Redirecciona a subseccion, ahora solo cambia nombre de pagina
     //@ts-ignore
     let id : string = event.target.innerText;
     this._page = id;
@@ -147,12 +169,21 @@ export class SideMenu extends connect(store)(LitElement) {
     this.pageCall(this._page);
   }
 
+  //Barra de busqueda menu
+  _buscar(input:Object){
+      //@ts-ignore
+      let enBusqueda : string = input.path[0].value;
+      this._busqueda = enBusqueda.toLowerCase();
+  }
+
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
+        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "Busqueda🔍"/>
+        <hr class="hr" >
 
         <button id = 'Noticias_Menu' class = "menu--item${(this._active == 'Noticias') ? ' chosen' : ''}" @click="${this._activateAndRedirect}">Noticias</button>
         <button id = 'Ramos_Menu' class = "menu--item${(this._active == 'Ramos') ? ' chosen' : ''}" @click="${this._activateMenu}">Ramos</button>
@@ -204,35 +235,37 @@ export class SideMenu extends connect(store)(LitElement) {
 
     //Buscador coincidencias busqueda, se ignoran errores obtenidos de extracción del DOM
     if (changedProps.has('_busqueda')) {
-        let i = 0;
-        while (i < 14){ //secciones.lenght){
+        let i = 2;
+        //@ts-ignore
+
+        while (i < (this.shadowRoot.children.length)){
             //@ts-ignore
-            let seccion = this.shadowRoot.children[i].innerText.toLowerCase();
-            this._active = '';
+            let seccion = this.shadowRoot.children[i];
+            //@ts-ignore
+            let nombreSeccion = seccion.innerText.toLowerCase()
+            //this._active = '';
 
             if (this._busqueda != ''){
-                if (seccion.includes(this._busqueda)){
-                    //@ts-ignore
-                    if (this.shadowRoot.children[i].className == 'menu--item menu--child invisible'){
+                //busqueda de coincidencias solo en subsecciones
+                if (seccion.className.includes('menu--child')){
+                    if (nombreSeccion.includes(this._busqueda)){
+                        if (seccion.className.includes('invisible')){
+                            seccion.className = 'menu--item menu--child visible';
+                        }
                         //@ts-ignore
-                        this.shadowRoot.children[i].className = 'menu--item menu--child visible';
+                        seccion.style.display = "block";
+                    }else{
+                        //@ts-ignore
+                        seccion.style.display = "none";
                     }
-                    //@ts-ignore
-                    this.shadowRoot.children[i].style.display = "block"
-
-                }else{
-                    //@ts-ignore
-                    this.shadowRoot.children[i].style.display = "none"
                 }
-
             }else{
-                //@ts-ignore
-                if (this.shadowRoot.children[i].className.includes('menu--item menu--child')){
+                //reestablecimiento de visualizacion subsecciones por campo vacio
+                if (seccion.className.includes('menu--item menu--child')){
+                    seccion.className = 'menu--item menu--child invisible';
                     //@ts-ignore
-                    this.shadowRoot.children[i].className = 'menu--item menu--child invisible';
+                    seccion.style.display = "block";
                 }
-                //@ts-ignore
-                this.shadowRoot.children[i].style.display = "block"
             }
             i++;
         }
