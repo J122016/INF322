@@ -109,13 +109,13 @@ export class SideMenu extends connect(store)(LitElement) {
           animation: fadeIn 0.8s;
         }
 
-        .menu--answer {
-          animation: fadeIn 0.8s;
-          background: red;
+        .chosen {
+          border: solid #0d1e52 2px;
+          background-color: #f57c00;
         }
 
-        .chosen {
-          border: solid black 5px;
+        .subChosen {
+            background-color: #fff176;
         }
 
         .search {
@@ -167,6 +167,18 @@ export class SideMenu extends connect(store)(LitElement) {
 
     //solucion momentanea? por no actualizacion de _page
     this.pageCall(this._page);
+
+    //Cambiando estilo de subseccion seleccionada
+    let seccion: any;   //html
+    //@ts-ignore
+    for (seccion of this.shadowRoot.children){
+        //@ts-ignore
+        if (seccion.innerText == event.target.innerText){
+            seccion.className = seccion.className + ' subChosen'
+        }else{
+            seccion.className = seccion.className.replace(' subChosen','');
+        }
+    }
   }
 
   //Barra de busqueda menu
@@ -182,7 +194,7 @@ export class SideMenu extends connect(store)(LitElement) {
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "Busqueda🔍"/>
+        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "Búsqueda🔍"/>
         <hr class="hr" >
 
         <button id = 'Noticias_Menu' class = "menu--item${(this._active == 'Noticias') ? ' chosen' : ''}" @click="${this._activateAndRedirect}">Noticias</button>
@@ -235,7 +247,7 @@ export class SideMenu extends connect(store)(LitElement) {
 
     //Buscador coincidencias busqueda, se ignoran errores obtenidos de extracción del DOM
     if (changedProps.has('_busqueda')) {
-        let i = 2;
+        let i : number = 2;
         //@ts-ignore
 
         while (i < (this.shadowRoot.children.length)){
@@ -243,7 +255,7 @@ export class SideMenu extends connect(store)(LitElement) {
             let seccion = this.shadowRoot.children[i];
             //@ts-ignore
             let nombreSeccion = seccion.innerText.toLowerCase()
-            //this._active = '';
+            this._active = '';
 
             if (this._busqueda != ''){
                 //busqueda de coincidencias solo en subsecciones
@@ -252,19 +264,14 @@ export class SideMenu extends connect(store)(LitElement) {
                         if (seccion.className.includes('invisible')){
                             seccion.className = 'menu--item menu--child visible';
                         }
-                        //@ts-ignore
-                        seccion.style.display = "block";
                     }else{
-                        //@ts-ignore
-                        seccion.style.display = "none";
+                        seccion.className = 'menu--item menu--child invisible';
                     }
                 }
             }else{
                 //reestablecimiento de visualizacion subsecciones por campo vacio
                 if (seccion.className.includes('menu--item menu--child')){
                     seccion.className = 'menu--item menu--child invisible';
-                    //@ts-ignore
-                    seccion.style.display = "block";
                 }
             }
             i++;

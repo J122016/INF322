@@ -52,6 +52,9 @@ export class Navbar extends connect(store)(LitElement) {
   static get styles() {
     return [customCss,
       css`
+      .title {
+          font-size: larger;
+      }
       `
     ];
   }
@@ -65,6 +68,7 @@ export class Navbar extends connect(store)(LitElement) {
   protected render() {
     return html`
         <div @click = "${this._home}"> USM 🏠 </div>
+        <div class = "title" >Sistema de Información de Gestión Académica</div>
         <div> Nombre Apellido Apellido </div>
 
     `;
