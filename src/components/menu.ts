@@ -182,9 +182,9 @@ export class SideMenu extends connect(store)(LitElement) {
   }
 
   //Barra de busqueda menu
-  _buscar(input:Object){
+  _buscar(event:MouseEvent){
       //@ts-ignore
-      let enBusqueda : string = input.path[0].value;
+      let enBusqueda : string = event.target.value;
       this._busqueda = enBusqueda.toLowerCase();
   }
 
