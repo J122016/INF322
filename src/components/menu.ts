@@ -47,7 +47,7 @@ export class SideMenu extends connect(store)(LitElement) {
   private _page: string = '';
 
   @property({type: String})
-  private _active: string = '';
+  public _active: string = '';
 
   @property({type: String})
   public _busqueda: string = '';

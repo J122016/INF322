@@ -55,6 +55,9 @@ export class Navbar extends connect(store)(LitElement) {
       .title {
           font-size: larger;
       }
+      .clickable {
+        cursor: pointer;
+      }
       `
     ];
   }
@@ -67,7 +70,7 @@ export class Navbar extends connect(store)(LitElement) {
    * Más info: https://polymer-library.polymer-project.org/3.0/docs/devguide/observers */
   protected render() {
     return html`
-        <div @click = "${this._home}"> USM 🏠 </div>
+        <div class = "clickable" @click = "${this._home}"> USM 🏠 </div>
         <div class = "title" >Sistema de Información de Gestión Académica</div>
         <div> Nombre Apellido Apellido </div>
 

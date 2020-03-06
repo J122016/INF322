@@ -52,6 +52,9 @@ export class MainPage extends connect(store)(LitElement) {
   private _loggedIn: boolean = false;
 
   @property({type: String})
+  private activeTab: string = "";
+
+  @property({type: String})
   private _page: string = '';
 
   private appTitle : string = 'Siga';
@@ -155,6 +158,7 @@ export class MainPage extends connect(store)(LitElement) {
   //Solucion alternativa, no se actualiza _page cuando cambia en componente interior
   private pageCallbackFunction = (mensaje: string) => {
     this._page = mensaje;
+    this.activeTab = mensaje; // Con esto desmarca la casilla "Noticias" si esta marcada, pero los submenus se cierran al presionar alguna opcion.
     this.render();
   }
 
@@ -181,7 +185,7 @@ export class MainPage extends connect(store)(LitElement) {
     <nav-bar id="header" class="navbar" style="vertical-align: middle;" .pageCall="${this.pageCallbackFunction}"></nav-bar>
 
         <div id="content">
-            <side-menu class="menu" .pageCall="${this.pageCallbackFunction}"> </side-menu>
+            <side-menu class="menu" ._active = "${this.activeTab}" .pageCall="${this.pageCallbackFunction}"> </side-menu>
             <!-- ACA está la utilización del componente, para pasarle datos usen un punto '.' más
                  el nombre de la variable del componente (public) -->
             ${this._section()}
