@@ -118,13 +118,16 @@ export class SideMenu extends connect(store)(LitElement) {
             background-color: #fff176;
         }
 
+        .search--coincidence {
+            background-color: #ff9925;
+        }
+
         .search {
             height: 30px;
             margin: 2%;
             border: 0px;
             padding: 0px;
             border-radius: 30px;
-            text-align: center;
             text-align-last: center;
             font-size: 17px;
         }
@@ -194,7 +197,7 @@ export class SideMenu extends connect(store)(LitElement) {
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "Búsqueda🔍"/>
+        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "B ú s q u e d a 🔍"/>
         <hr class="hr" >
 
         <button id = 'Noticias_Menu' class = "menu--item${(this._active == 'Noticias') ? ' chosen' : ''}" @click="${this._activateAndRedirect}">Noticias</button>
@@ -255,23 +258,28 @@ export class SideMenu extends connect(store)(LitElement) {
             let seccion = this.shadowRoot.children[i];
             //@ts-ignore
             let nombreSeccion = seccion.innerText.toLowerCase()
-            this._active = '';
 
             if (this._busqueda != ''){
                 //busqueda de coincidencias solo en subsecciones
                 if (seccion.className.includes('menu--child')){
                     if (nombreSeccion.includes(this._busqueda)){
-                        if (seccion.className.includes('invisible')){
-                            seccion.className = 'menu--item menu--child visible';
-                        }
+                        seccion.className = 'menu--item menu--child visible';
                     }else{
                         seccion.className = 'menu--item menu--child invisible';
+                    }
+                }else{
+                    if (nombreSeccion.includes(this._busqueda)){
+                        seccion.className = 'menu--item search--coincidence';
+                    }else{
+                        seccion.className = 'menu--item';
                     }
                 }
             }else{
                 //reestablecimiento de visualizacion subsecciones por campo vacio
                 if (seccion.className.includes('menu--item menu--child')){
                     seccion.className = 'menu--item menu--child invisible';
+                }else{ //menu--item
+                    seccion.className = 'menu--item';
                 }
             }
             i++;
