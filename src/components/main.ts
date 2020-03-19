@@ -160,7 +160,7 @@ export class MainPage extends connect(store)(LitElement) {
     this._page = mensaje;
     if(mensaje === "Inicio") {  // Este if funciona solo la primera vez. ¿Alguien sabe por que?
       this.activeTab = mensaje; // Con esto desmarca la casilla "Noticias" si esta marcada, pero los submenus se cierran al presionar alguna opcion.
-    } else console.log("Dude!");
+    }
     this.render();
   }
 

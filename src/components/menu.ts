@@ -127,8 +127,9 @@ export class SideMenu extends connect(store)(LitElement) {
             margin: 2%;
             border: 0px;
             padding: 0px;
+            padding-left: 15px;
             border-radius: 30px;
-            text-align-last: center;
+            text-align-last: left;
             font-size: 17px;
         }
 
@@ -148,13 +149,7 @@ export class SideMenu extends connect(store)(LitElement) {
     this._busqueda = '';
     //@ts-ignore
     let id : string = event.target.id;
-    switch (id){
-        case 'Noticias_Menu': {this._active = ((this._active == 'Noticias') ? '' : 'Noticias') ; break;}
-        case 'Ramos_Menu': {this._active = ((this._active == 'Ramos') ? '' : 'Ramos') ; break;}
-        case 'Solicitudes_Menu': {this._active = ((this._active == 'Solicitudes Externas') ? '' : 'Solicitudes Externas') ; break;}
-        case 'Enlaces_Menu': {this._active = ((this._active == 'Enlaces Externos') ? '' : 'Enlaces Externos') ; break;}
-        default: {this._active = '' ; break;}
-    }
+    store.dispatch(navigate("/" + id));
   }
 
   _activateAndRedirect (event : MouseEvent){
@@ -165,7 +160,7 @@ export class SideMenu extends connect(store)(LitElement) {
   //Redirecciona a subseccion, cambiando nombre de pagina
   _redirect (event : MouseEvent){
     //@ts-ignore
-    let id : string = event.target.innerText;
+    let id : string = event.target.id;
     this._page = id;
 
     //solucion momentanea? por no actualizacion de _page
@@ -182,6 +177,7 @@ export class SideMenu extends connect(store)(LitElement) {
             seccion.className = seccion.className.replace(' subChosen','');
         }
     }
+    store.dispatch(navigate("/" + id));
   }
 
   //Barra de busqueda menu
@@ -197,23 +193,23 @@ export class SideMenu extends connect(store)(LitElement) {
   protected render() {
     /* Acá está la página principal, cada componente debería tener un lugar donde puedan probarlo. */
     return html`
-        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "B ú s q u e d a 🔍"/>
+        <input class="search" @keyup = "${this._buscar}" type = "text" placeholder = "             B ú s q u e d a 🔍"/>
         <hr class="hr" >
 
-        <button id = 'Noticias_Menu' class = "menu--item${(this._active == 'Noticias') ? ' chosen' : ''}" @click="${this._activateAndRedirect}">Noticias</button>
-        <button id = 'Ramos_Menu' class = "menu--item${(this._active == 'Ramos') ? ' chosen' : ''}" @click="${this._activateMenu}">Ramos</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Búsqueda de ramos</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Asignaturas inscritas</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Ramos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Inscripción</button>
-        <button id = 'Solicitudes_Menu' class = "menu--item${(this._active == 'Solicitudes Externas') ? ' chosen' : ''}" @click="${this._activateMenu}">Solicitudes Externas</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Certificados</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Cambio de mención</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Solicitudes Académicas y Peticiones</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Matrícula Sin Ramos</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Solicitudes Externas') ? 'visible' : 'invisible')}" @click="${this._redirect}">Autorización Académica</button>
-        <button id = 'Enlaces_Menu' class = "menu--item${(this._active == 'Enlaces Externos') ? ' chosen' : ''}" @click="${this._activateMenu}">Enlaces Externos</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Sireb</button>
-          <button class = "${"menu--item menu--child " + ((this._active == 'Enlaces Externos') ? 'visible' : 'invisible')}" @click="${this._redirect}">Aula</button>
+        <button id = 'Noticias_Menu' class = "menu--item${(this._page == 'Noticias_Menu') ? ' chosen' : ''}" @click="${this._activateAndRedirect}">Noticias</button>
+        <button id = 'Ramos_Menu' class = "menu--item${(this._page == 'Ramos_Menu') ? ' chosen' : ''}" @click="${this._activateMenu}">Ramos</button>
+          <button id = 'Busqueda_de_ramos' class = "${"menu--item menu--child " + ((this._page == 'Ramos_Menu' || this._page == 'Busqueda_de_ramos' || this._page == 'Asignaturas_inscritas' || this._page == 'Inscripcion') ? 'visible' : 'invisible')}" @click="${this._redirect}">Búsqueda de ramos</button>
+          <button id = 'Asignaturas_inscritas' class = "${"menu--item menu--child " + ((this._page == 'Ramos_Menu' || this._page == 'Busqueda_de_ramos' || this._page == 'Asignaturas_inscritas' || this._page == 'Inscripcion') ? 'visible' : 'invisible')}" @click="${this._redirect}">Asignaturas inscritas</button>
+          <button id = 'Inscripcion' class = "${"menu--item menu--child " + ((this._page == 'Ramos_Menu' || this._page == 'Busqueda_de_ramos' || this._page == 'Asignaturas_inscritas' || this._page == 'Inscripcion') ? 'visible' : 'invisible')}" @click="${this._redirect}">Inscripción</button>
+        <button id = 'Solicitudes_Menu' class = "menu--item${(this._page == 'Solicitudes_Menu') ? ' chosen' : ''}" @click="${this._activateMenu}">Solicitudes Externas</button>
+          <button id = 'Certificados' class = "${"menu--item menu--child " + ((this._page == 'Certificados' || this._page == 'Cambio_de_mencion' || this._page == 'Solicitudes_academicas_y_peticiones' || this._page == 'Matricula_sin_ramos' || this._page == 'Autorizacion_academica' || this._page == 'Solicitudes_Menu') ? 'visible' : 'invisible')}" @click="${this._redirect}">Certificados</button>
+          <button id = 'Cambio_de_mencion' class = "${"menu--item menu--child " + ((this._page == 'Certificados' || this._page == 'Cambio_de_mencion' || this._page == 'Solicitudes_academicas_y_peticiones' || this._page == 'Matricula_sin_ramos' || this._page == 'Autorizacion_academica' || this._page == 'Solicitudes_Menu') ? 'visible' : 'invisible')}" @click="${this._redirect}">Cambio de mención</button>
+          <button id = 'Solicitudes_academicas_y_peticiones' class = "${"menu--item menu--child " + ((this._page == 'Certificados' || this._page == 'Cambio_de_mencion' || this._page == 'Solicitudes_academicas_y_peticiones' || this._page == 'Matricula_sin_ramos' || this._page == 'Autorizacion_academica' || this._page == 'Solicitudes_Menu') ? 'visible' : 'invisible')}" @click="${this._redirect}">Solicitudes Académicas y Peticiones</button>
+          <button id = 'Matricula_sin_ramos' class = "${"menu--item menu--child " + ((this._page == 'Certificados' || this._page == 'Cambio_de_mencion' || this._page == 'Solicitudes_academicas_y_peticiones' || this._page == 'Matricula_sin_ramos' || this._page == 'Autorizacion_academica' || this._page == 'Solicitudes_Menu') ? 'visible' : 'invisible')}" @click="${this._redirect}">Matrícula Sin Ramos</button>
+          <button id = 'Autorizacion_academica' class = "${"menu--item menu--child " + ((this._page == 'Certificados' || this._page == 'Cambio_de_mencion' || this._page == 'Solicitudes_academicas_y_peticiones' || this._page == 'Matricula_sin_ramos' || this._page == 'Autorizacion_academica' || this._page == 'Solicitudes_Menu') ? 'visible' : 'invisible')}" @click="${this._redirect}">Autorización Académica</button>
+        <button id = 'Enlaces_Menu' class = "menu--item${(this._page == 'Enlaces_Menu') ? ' chosen' : ''}" @click="${this._activateMenu}">Enlaces Externos</button>
+          <button id = 'Sireb' class = "${"menu--item menu--child " + ((this._page == 'Enlaces_Menu' || this._page == 'Sireb' || this._page == 'Aula') ? 'visible' : 'invisible')}" @click="${this._redirect}">Sireb</button>
+          <button id = 'Aula' class = "${"menu--item menu--child " + ((this._page == 'Enlaces_Menu' || this._page == 'Sireb' || this._page == 'Aula') ? 'visible' : 'invisible')}" @click="${this._redirect}">Aula</button>
 
     `;
   }

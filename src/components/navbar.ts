@@ -64,6 +64,7 @@ export class Navbar extends connect(store)(LitElement) {
 
   _home() {
     this.pageCall("Inicio");
+    store.dispatch(navigate("/Inicio"));
   }
   /* Render se ejecuta cada vez que se modifica una variable marcada como property, OJO: no se verifican las
    * subpropiedades de los objetos, pueden requerir una actualización usando this.requestUpdate();

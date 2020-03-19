@@ -39,7 +39,7 @@ export const navigate: ActionCreator<ThunkResult> = (path: string) => (dispatch)
 
 const loadPage: ActionCreator<ThunkResult> = (page: string) => (dispatch) => {
   switch(page) {
-    case 'main':
+    case 'main': {
       import('../components/menu');
       import('../components/navbar');
       import('../components/main').then((_module) => {
@@ -47,9 +47,56 @@ const loadPage: ActionCreator<ThunkResult> = (page: string) => (dispatch) => {
         // navigating to view1 after my-view1.js is loaded.
       });
       break;
-    default:
+    }
+    case 'Ramos_Menu': {
+      break;
+    }
+    case 'Noticias_Menu': {
+      break;
+    }
+    case 'Solicitudes_Menu': {
+      break;
+    }
+    case 'Enlaces_Menu': {
+      break;
+    }
+    case 'Inicio': {
+      break;
+    }
+    case 'Busqueda_de_ramos': {
+      break;
+    }
+    case 'Asignaturas_inscritas': {
+      break;
+    }
+    case 'Inscripcion': {
+      break;
+    }
+    case 'Certificados': {
+      break;
+    }
+    case 'Cambio_de_mencion': {
+      break;
+    }
+    case 'Solicitudes_academicas_y_peticiones': {
+      break;
+    }
+    case 'Matricula_sin_ramos': {
+      break;
+    }
+    case 'Autorizacion_academica': {
+      break;
+    }
+    case 'Sireb': {
+      break;
+    }
+    case 'Aula': {
+      break;
+    }
+    default: {
       page = 'view404';
       import('../components/my-view404.js');
+    }
   }
 
   dispatch(updatePage(page));
