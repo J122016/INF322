@@ -167,10 +167,19 @@ export class MainPage extends connect(store)(LitElement) {
   _section(){
       //Opcion 1 switches, retornando el componente (mientras probando con html)
       switch (this._page){
-          case 'Noticias': {return html`<div class = "component-margin"><p>Noticias importantes para el usuario</p><p>Documentos con información general</p></div>`; break;}
-          case 'Búsqueda de ramos': {return html `<horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>`; break;}
-          case 'Seccion ejemplo': {return html`<div class = "component-margin">retornar componente sección ejemplo</div>` ; break;}
-          default: {return html`<div class = "component-margin">${this._page}</div>` ; break;}
+          case 'Noticias_Menu': {return html`<div class = "component-margin"><p>Noticias importantes para el usuario</p><p>Documentos con información general</p></div>`; break;}
+          case 'Busqueda_de_ramos': {return html `<horario-clases class="component-margin" .cursos="${this._cursos}"></horario-clases>`; break;}
+          case 'Asignaturas_inscritas': {return html`<div class = "component-margin">Asignaturas_inscritas</div>` ; break;}
+          case 'Inscripcion': {return html`<div class = "component-margin">Inscripción</div>` ; break;}
+          case 'Certificados': {return html`<div class = "component-margin">Certificados</div>` ; break;}
+          case 'Cambio_de_mencion': {return html`<div class = "component-margin">Cambio_de_mencion</div>` ; break;}
+          case 'Solicitudes_academicas_y_peticiones': {return html`<div class = "component-margin">Solicitudes_academicas_y_peticiones</div>` ; break;}
+          case 'Matricula_sin_ramos': {return html`<div class = "component-margin">Matricula_sin_ramos</div>` ; break;}
+          case 'Autorizacion_academica': {return html`<div class = "component-margin">Autorizacion_academica</div>` ; break;}
+          case 'Sireb': {return html`<div class = "component-margin">Sireb</div>` ; break;}
+          case 'Aula': {return html`<div class = "component-margin">Aula</div>` ; break;}
+          //Menu sin página
+          default: {return html`<div class = "component-margin">Menú: ${this._page}</div>` ; break;}
       }
 
       //Opcion 2 usando mismo nombre de pagina - requiere modificar nombres de componentes para que coincidan, ejemplo:

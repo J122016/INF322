@@ -161,20 +161,22 @@ export class SideMenu extends connect(store)(LitElement) {
   _redirect (event : MouseEvent){
     //@ts-ignore
     let id : string = event.target.id;
-    this._page = id;
 
     //solucion momentanea? por no actualizacion de _page
     this.pageCall(this._page);
 
     //Cambiando estilo de subseccion seleccionada
+    //(Ocurre un glitch cuando se selecciona el mismo submenu 2 veces, luego su menú y luego otro submenu, se marcan 2 submenus)
     let seccion: any;   //html
     //@ts-ignore
     for (seccion of this.shadowRoot.children){
-        //@ts-ignore
-        if (seccion.innerText == event.target.innerText){
-            seccion.className = seccion.className + ' subChosen'
-        }else{
-            seccion.className = seccion.className.replace(' subChosen','');
+        if (seccion.className.includes('menu--child')){
+            //@ts-ignore
+            if (seccion.innerText == event.target.innerText){
+                seccion.className = seccion.className + ' subChosen'
+            }else{
+                seccion.className = seccion.className.replace(' subChosen','');
+            }
         }
     }
     store.dispatch(navigate("/" + id));
@@ -256,7 +258,7 @@ export class SideMenu extends connect(store)(LitElement) {
             let nombreSeccion = seccion.innerText.toLowerCase()
 
             if (this._busqueda != ''){
-                //busqueda de coincidencias solo en subsecciones
+                //busqueda de coincidencias en subsecciones
                 if (seccion.className.includes('menu--child')){
                     if (nombreSeccion.includes(this._busqueda)){
                         seccion.className = 'menu--item menu--child visible';
@@ -264,6 +266,7 @@ export class SideMenu extends connect(store)(LitElement) {
                         seccion.className = 'menu--item menu--child invisible';
                     }
                 }else{
+                    //Busqueda en secciones
                     if (nombreSeccion.includes(this._busqueda)){
                         seccion.className = 'menu--item search--coincidence';
                     }else{
